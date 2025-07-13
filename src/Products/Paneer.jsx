@@ -6,6 +6,9 @@ const defaultIngredients = [
   { name: 'Customer Coagulant', quantity: 0.6, price: 160, isFixed: true },
 ];
 
+const LOCAL_STORAGE_KEY = 'paneerCalcData';
+const EXPIRY_HOURS = 4;
+
 function Paneer() {
   const [ingredients, setIngredients] = useState(defaultIngredients);
   const [totalPaneer, setTotalPaneer] = useState(51);
@@ -79,6 +82,16 @@ function Paneer() {
   // Customer Monthly Extra Profit (Rs)
   const customerMonthlyExtraProfit = customerDailyExtraProfit * 30;
 
+  // Customer Table: update ingredients and totalPaneer as numbers
+  const handleIngredientChange = (idx, field, value) => {
+    setIngredients(ings => ings.map((ing, i) => i === idx ? { ...ing, [field]: field === 'quantity' || field === 'price' ? Number(value) : value } : ing));
+  };
+
+  // Customer Table: update totalPaneer as number
+  const handleTotalPaneerChange = (value) => {
+    setTotalPaneer(Number(value));
+  };
+
   return (
     <>
       {/* Tables Section - Responsive Layout */}
@@ -96,7 +109,7 @@ function Paneer() {
                         className="border rounded p-1 flex-1"
                         type="text"
                         value={ing.name}
-                        onChange={e => setIngredients(ings => ings.map((ing2, i) => i === idx ? { ...ing2, name: e.target.value } : ing2))}
+                        onChange={e => handleIngredientChange(idx, 'name', e.target.value)}
                         placeholder="Ingredient Name"
                         disabled={ing.isFixed}
                       />
@@ -115,7 +128,7 @@ function Paneer() {
                         className="border rounded p-1 w-1/2"
                         type="number"
                         value={ing.quantity}
-                        onChange={e => setIngredients(ings => ings.map((ing2, i) => i === idx ? { ...ing2, quantity: e.target.value } : ing2))}
+                        onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
                         placeholder="Quantity (kg)"
                         min="0"
                       />
@@ -123,7 +136,7 @@ function Paneer() {
                         className="border rounded p-1 w-1/2"
                         type="number"
                         value={ing.price}
-                        onChange={e => setIngredients(ings => ings.map((ing2, i) => i === idx ? { ...ing2, price: e.target.value } : ing2))}
+                        onChange={e => handleIngredientChange(idx, 'price', e.target.value)}
                         placeholder="Price per kg"
                         min="0"
                       />
@@ -144,7 +157,7 @@ function Paneer() {
                     className="border rounded p-1 w-24 text-right"
                     type="number"
                     value={totalPaneer}
-                    onChange={e => setTotalPaneer(e.target.value)}
+                    onChange={e => handleTotalPaneerChange(e.target.value)}
                     min="0"
                   />
                 </div>
@@ -192,7 +205,7 @@ function Paneer() {
                       className="border rounded p-1 flex-1"
                       type="text"
                       value={ing.name}
-                      onChange={e => setIngredients(ings => ings.map((ing2, i) => i === idx ? { ...ing2, name: e.target.value } : ing2))}
+                      onChange={e => handleIngredientChange(idx, 'name', e.target.value)}
                       placeholder="Ingredient Name"
                       disabled={ing.isFixed}
                     />
@@ -211,7 +224,7 @@ function Paneer() {
                       className="border rounded p-1 w-1/2"
                       type="number"
                       value={ing.quantity}
-                      onChange={e => setIngredients(ings => ings.map((ing2, i) => i === idx ? { ...ing2, quantity: e.target.value } : ing2))}
+                      onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
                       placeholder="Quantity (kg)"
                       min="0"
                     />
@@ -219,7 +232,7 @@ function Paneer() {
                       className="border rounded p-1 w-1/2"
                       type="number"
                       value={ing.price}
-                      onChange={e => setIngredients(ings => ings.map((ing2, i) => i === idx ? { ...ing2, price: e.target.value } : ing2))}
+                      onChange={e => handleIngredientChange(idx, 'price', e.target.value)}
                       placeholder="Price per kg"
                       min="0"
                     />
@@ -240,7 +253,7 @@ function Paneer() {
                   className="border rounded p-1 w-24 text-right"
                   type="number"
                   value={totalPaneer}
-                  onChange={e => setTotalPaneer(e.target.value)}
+                  onChange={e => handleTotalPaneerChange(e.target.value)}
                   min="0"
                 />
               </div>
