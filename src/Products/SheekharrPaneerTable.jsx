@@ -11,10 +11,9 @@ const defaultIngredients = [
   // Coagulant row will be handled separately
 ];
 
-function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, customerYieldPercent }) {
+function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, customerYieldPercent, paneerQty, setPaneerQty }) {
   const [selectedCoagulant, setSelectedCoagulant] = useState('SC-900');
   const [ingredients, setIngredients] = useState(defaultIngredients.map(ing => ({ ...ing, quantity: ing.name === 'Milk' ? milkQty : ing.quantity, price: ing.name === 'Milk' ? milkPrice : ing.price })));
-  const [totalPaneer, setTotalPaneer] = useState(57.3);
 
   // Update milk quantity and price in ingredients when props change
   React.useEffect(() => {
@@ -26,17 +25,17 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
 
   // Coagulant calculations
   const coagulant = COAGULANT_OPTIONS[selectedCoagulant];
-  const coagulantQty = milkQty > 0 ? (milkQty * coagulant.dosagePercent / 100).toFixed(3) : '';
-  const coagulantCost = coagulantQty ? (coagulant.pricePerKg * coagulantQty).toFixed(2) : '';
+  const coagulantQty = milkQty > 0 ? (milkQty * coagulant.dosagePercent / 100) : 0;
+  const coagulantCost = coagulantQty * coagulant.pricePerKg;
 
   // Calculate yield %
-  const yieldPercent = milkQty > 0 ? ((totalPaneer * 100) / milkQty).toFixed(2) : '';
+  const yieldPercent = milkQty > 0 ? ((paneerQty * 100) / milkQty).toFixed(2) : '';
 
   // Calculate price per kg (milk + coagulant + extra ingredients)
   const extraIngredients = ingredients.filter(ing => !ing.isFixed);
   const extraCost = extraIngredients.reduce((sum, ing) => sum + (Number(ing.quantity) * Number(ing.price)), 0);
   const totalCost = (Number(milkQty) * Number(milkPrice)) + Number(coagulantCost) + extraCost;
-  const pricePerKg = totalPaneer > 0 ? (totalCost / totalPaneer).toFixed(2) : '';
+  const pricePerKg = paneerQty > 0 ? (totalCost / paneerQty).toFixed(2) : '';
 
   // Yield % difference
   const yieldDiff = customerYieldPercent && yieldPercent ? (yieldPercent - customerYieldPercent).toFixed(2) : '';
@@ -160,8 +159,8 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
           <input
             className="border rounded p-1 w-24 text-right"
             type="number"
-            value={totalPaneer}
-            onChange={e => setTotalPaneer(e.target.value)}
+            value={paneerQty}
+            onChange={e => setPaneerQty(Number(e.target.value))}
             min="0"
           />
         </div>

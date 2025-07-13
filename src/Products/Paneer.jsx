@@ -45,33 +45,34 @@ function Paneer() {
   const sheekharrCoagulantCost = sheekharrCoagulantQty * sheekharrCoagulant.pricePerKg;
 
   // Profit with above batch
-  const profitWithBatch = ((sheekharrPaneerQty - totalPaneer) * sellingPrice) - (sheekharrCoagulantCost - customerCoagulantCost);
+  const profitWithBatch = ((Number(sheekharrPaneerQty) - Number(totalPaneer)) * sellingPrice) - (sheekharrCoagulantQty * sheekharrCoagulant.pricePerKg);
 
   const [customerDailyProduction, setCustomerDailyProduction] = useState(1000);
 
   // Calculate yield % for both (now using synced milk quantity)
-  const sheekharrYieldPercent = milkQty > 0 ? (sheekharrPaneerQty * 100) / milkQty : 0;
-  const customerYieldPercentNum = milkQty > 0 ? (totalPaneer * 100) / milkQty : 0;
+  const sheekharrYieldPercent = milkQty > 0 ? (Number(sheekharrPaneerQty) * 100) / milkQty : 0;
+  const customerYieldPercentNum = milkQty > 0 ? (Number(totalPaneer) * 100) / milkQty : 0;
 
-  // Customer Daily Extra Paneer with SC 900
-  const customerDailyExtraPaneer = customerYieldPercentNum > 0
-    ? (customerDailyProduction * (sheekharrYieldPercent / customerYieldPercentNum)) - customerDailyProduction
-    : 0;
+  // Customer Daily Extra Paneer with SC 900 (kg)
+  const customerDailyExtraPaneer =
+    (customerDailyProduction * (sheekharrYieldPercent / customerYieldPercentNum)) - customerDailyProduction;
 
   // Customer Daily Extra Profit (Rs)
-  const customerDailyExtraProfit = Math.max(0,
+  const customerDailyExtraProfit =
     (customerDailyExtraPaneer * sellingPrice) -
-    (((customerDailyProduction + customerDailyExtraPaneer) * (sheekharrCoagulant.pricePerKg * sheekharrCoagulantQty)) / sheekharrPaneerQty)
-  );
+    (((customerDailyProduction + customerDailyExtraPaneer) * (sheekharrCoagulant.pricePerKg * sheekharrCoagulantQty)) / Number(sheekharrPaneerQty));
 
   // Debug logging
-  console.log('Debug values:', {
-    customerDailyExtraPaneer,
-    sellingPrice,
-    customerDailyProduction,
-    sheekharrCoagulantPrice: sheekharrCoagulant.pricePerKg,
-    sheekharrCoagulantQty,
+  console.log({
     sheekharrPaneerQty,
+    totalPaneer,
+    sellingPrice,
+    sheekharrCoagulantQty,
+    sheekharrCoagulantPrice: sheekharrCoagulant.pricePerKg,
+    customerDailyProduction,
+    sheekharrYieldPercent,
+    customerYieldPercentNum,
+    customerDailyExtraPaneer,
     customerDailyExtraProfit
   });
 
@@ -171,8 +172,8 @@ function Paneer() {
                 milkPrice={sheekharrMilkPrice}
                 setMilkPrice={setSheekharrMilkPrice}
                 customerYieldPercent={yieldPercent}
-                setPaneerQty={setSheekharrPaneerQty}
                 paneerQty={sheekharrPaneerQty}
+                setPaneerQty={setSheekharrPaneerQty}
                 selectedCoagulant={selectedCoagulant}
                 setSelectedCoagulant={setSelectedCoagulant}
               />
@@ -263,8 +264,8 @@ function Paneer() {
             milkPrice={sheekharrMilkPrice}
             setMilkPrice={setSheekharrMilkPrice}
             customerYieldPercent={yieldPercent}
-            setPaneerQty={setSheekharrPaneerQty}
             paneerQty={sheekharrPaneerQty}
+            setPaneerQty={setSheekharrPaneerQty}
             selectedCoagulant={selectedCoagulant}
             setSelectedCoagulant={setSelectedCoagulant}
           />
