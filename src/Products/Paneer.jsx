@@ -256,7 +256,7 @@ function Paneer() {
             </div>
             <div className="mt-6 space-y-3">
               <div className="flex items-center gap-2">
-                <label className="font-semibold flex-1">Total Paneer Product (kg):</label>
+                <label className="font-semibold flex-1">Total Paneer Formed (kg):</label>
                 <input
                   className="border rounded p-1 w-24 text-right"
                   type="number"
@@ -326,7 +326,7 @@ function Paneer() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <label className="font-semibold flex-1">Customer Daily Extra Paneer with SC 900 (kg):</label>
+              <label className="font-semibold flex-1">Customer Daily Extra Paneer with Sheekhar Coagulant (kg):</label>
               <span className="bg-blue-100 text-blue-900 rounded px-3 py-1 min-w-[80px] text-right font-bold">{customerDailyExtraPaneer.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
             </div>
           </div>

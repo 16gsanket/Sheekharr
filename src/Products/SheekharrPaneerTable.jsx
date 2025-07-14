@@ -202,8 +202,8 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">per kg</span>
             </div>
           </div>
-          <div className="text-xs text-gray-500 mt-1">Dosage: {coagulant.dosagePercent}% of milk</div>
-          <div className="text-xs text-gray-500 mt-1">Recommended Dosage : <span className="font-bold">{recommendedCoagulantQty}</span>Kg</div>
+          <div className="text-xs text-gray-500 mt-1">Dosage: {coagulantQty}% of milk</div>
+          <div className="text-xs text-gray-500 mt-1">Recommended Dosage : <span className="font-bold">{coagulant.dosagePercent}% of milk </span></div>
         </div>
         <button
           className="w-full bg-blue-100 text-blue-900 rounded py-2 font-semibold mt-2"
@@ -214,7 +214,7 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
       </div>
       <div className="mt-6 space-y-3">
         <div className="flex items-center gap-2">
-          <label className="font-semibold flex-1">Total Paneer Product (kg):</label>
+          <label className="font-semibold flex-1">Total Paneer Formed (kg):</label>
           <input
             className="border rounded p-1 w-24 text-right"
             type="number"
