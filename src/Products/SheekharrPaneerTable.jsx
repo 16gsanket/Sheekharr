@@ -17,18 +17,22 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
   const [selectedCoagulant, setSelectedCoagulant] = useState('SC-900');
   const [ingredients, setIngredients] = useState(defaultIngredients.map(ing => ({ ...ing, quantity: ing.name === 'Milk' ? milkQty : ing.quantity, price: ing.name === 'Milk' ? milkPrice : ing.price })));
 
-  // Update milk quantity and price in ingredients when props change
-  React.useEffect(() => {
-    setIngredients(ings => ings.map(ing => {
-      if (ing.name === 'Milk') return { ...ing, quantity: milkQty, price: milkPrice };
-      return ing;
-    }));
-  }, [milkQty, milkPrice]);
-
-  // Coagulant calculations
+  // New state for editable coagulant fields
   const coagulant = COAGULANT_OPTIONS[selectedCoagulant];
-  const coagulantQty = milkQty > 0 ? (milkQty * coagulant.dosagePercent / 100) : 0;
-  const coagulantCost = coagulantQty * coagulant.pricePerKg;
+  const autoCoagulantQty = milkQty > 0 ? (milkQty * coagulant.dosagePercent / 100) : 0;
+  const recommendedCoagulantQty = milkQty > 0 ? (milkQty * coagulant.dosagePercent / 100) : 0;
+  const autoCoagulantPricePerKg = coagulant.pricePerKg;
+  const [coagulantQty, setCoagulantQty] = useState(autoCoagulantQty);
+  const [coagulantPricePerKg, setCoagulantPricePerKg] = useState(autoCoagulantPricePerKg);
+
+  // Sync coagulant fields with auto values when dependencies change, unless user has overridden
+  React.useEffect(() => {
+    setCoagulantQty(autoCoagulantQty);
+    setCoagulantPricePerKg(autoCoagulantPricePerKg);
+  }, [selectedCoagulant, milkQty]);
+
+  // Calculate coagulant cost
+  const coagulantCost = (Number(coagulantQty) || 0) * (Number(coagulantPricePerKg) || 0);
 
   // Calculate yield %
   const yieldPercent = milkQty > 0 ? ((paneerQty * 100) / milkQty).toFixed(2) : '';
@@ -60,6 +64,36 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
   // Remove ingredient
   const removeIngredient = idx => {
     setIngredients(ings => ings.filter((_, i) => i !== idx));
+  };
+
+  // Handlers for coagulant fields
+  const handleCoagulantQtyChange = (e) => {
+    const value = e.target.value;
+    if (value === '' || isNaN(Number(value))) {
+      setCoagulantQty('');
+    } else {
+      setCoagulantQty(Number(value));
+    }
+  };
+  const handleCoagulantPriceChange = (e) => {
+    const value = e.target.value;
+    if (value === '' || isNaN(Number(value))) {
+      setCoagulantPricePerKg('');
+    } else {
+      setCoagulantPricePerKg(Number(value));
+    }
+  };
+
+  // If user clears the field, revert to auto value on blur
+  const handleCoagulantQtyBlur = () => {
+    if (coagulantQty === '' || isNaN(Number(coagulantQty))) {
+      setCoagulantQty(autoCoagulantQty);
+    }
+  };
+  const handleCoagulantPriceBlur = () => {
+    if (coagulantPricePerKg === '' || isNaN(Number(coagulantPricePerKg))) {
+      setCoagulantPricePerKg(autoCoagulantPricePerKg);
+    }
   };
 
   return (
@@ -120,7 +154,7 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
             </div>
           </div>
         ))}
-        {/* Coagulant row (auto-calculated) */}
+        {/* Coagulant row (auto-calculated, now editable) */}
         <div className="bg-slate-100 rounded p-3 flex flex-col gap-2 relative">
           <div className="flex items-center gap-2">
             <input
@@ -132,21 +166,26 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
           </div>
           <div className="flex gap-2">
             <input
-              className="border rounded p-1 w-1/2 bg-gray-100"
+              className="border rounded p-1 w-1/2 "
               type="number"
               value={coagulantQty}
-              disabled
+              onChange={handleCoagulantQtyChange}
+              onBlur={handleCoagulantQtyBlur}
               placeholder="Quantity (kg)"
+              min="0"
             />
             <input
-              className="border rounded p-1 w-1/2 bg-gray-100"
+              className="border rounded p-1 w-1/2 "
               type="number"
-              value={coagulant.pricePerKg}
-              disabled
+              value={coagulantPricePerKg}
+              onChange={handleCoagulantPriceChange}
+              onBlur={handleCoagulantPriceBlur}
               placeholder="Price per kg"
+              min="0"
             />
           </div>
           <div className="text-xs text-gray-500 mt-1">Dosage: {coagulant.dosagePercent}% of milk</div>
+          <div className="text-xs text-gray-500 mt-1">Recommended Dosage : <span className="font-bold">{recommendedCoagulantQty}</span>Kg</div>
         </div>
         <button
           className="w-full bg-blue-100 text-blue-900 rounded py-2 font-semibold mt-2"
