@@ -23,7 +23,7 @@ const defaultSheekharrIngredients = [
   { name: 'Water', quantity: 1.95, price: 0.1, isFixed: true },
 ];
 
-function IngredientTable({ title, ingredients, setIngredients, totalMix, setTotalMix, overrun, setOverrun, pricePerKg, pricePerLitre, isSheekharr, isCustomer }) {
+function IngredientTable({ title, ingredients, setIngredients, totalMix, setTotalMix, overrun, setOverrun, pricePerKg, pricePerLitre, isSheekharr }) {
   // Auto-calculate total mix whenever ingredients change (only for Sheekharr table)
   useEffect(() => {
     if (isSheekharr) {
@@ -91,28 +91,35 @@ function IngredientTable({ title, ingredients, setIngredients, totalMix, setTota
               )}
             </div>
             <div className="flex gap-2 items-center">
-              <input
-                className={`border rounded p-1 w-1/2 ${isSheekharr && ing.name === 'CreamTec IC Pro' ? 'bg-gray-100' : ''}`}
-                type="number"
-                value={ing.quantity}
-                onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
-                placeholder="Quantity (kg)"
-                min="0"
-                disabled={isSheekharr && ing.name === 'CreamTec IC Pro'}
-              />
-              <input
-                className="border rounded p-1 w-1/2"
-                type="number"
-                value={ing.price}
-                onChange={e => handleIngredientChange(idx, 'price', e.target.value)}
-                placeholder="Price per kg"
-                min="0"
-              />
-              {/* Show dosage remark if present */}
-              {isSheekharr && ing.name === 'CreamTec IC Pro' && (
-                <span className="ml-2 text-xs text-gray-500">{ing.dosageRemark}</span>
-              )}
+              <div className="relative w-1/2">
+                <input
+                  className={`border rounded p-1 pr-8 w-full ${isSheekharr && ing.name === 'CreamTec IC Pro' ? 'bg-gray-100' : ''}`}
+                  type="number"
+                  value={ing.quantity}
+                  onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
+                  placeholder="Quantity"
+                  min="0"
+                  disabled={isSheekharr && ing.name === 'CreamTec IC Pro'}
+                />
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">kg</span>
+              </div>
+              <div className="relative w-1/2">
+                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">Rs</span>
+                <input
+                  className="border rounded p-1 pl-8 pr-14 w-full"
+                  type="number"
+                  value={ing.price}
+                  onChange={e => handleIngredientChange(idx, 'price', e.target.value)}
+                  placeholder="Price"
+                  min="0"
+                />
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">per kg</span>
+              </div>
             </div>
+            {/* Show dosage remark for any ingredient with dosageRemark on a new line */}
+            {ing.dosageRemark && (
+              <div className="ml-1 text-xs text-gray-500 mt-1">{ing.dosageRemark}</div>
+            )}
           </div>
         ))}
         <button
@@ -192,7 +199,6 @@ function IceCream() {
 
   // Shared Inputs
   const [sellingPricePerKg, setSellingPricePerKg] = useState(350);
-  const [sellingPricePerLitre, setSellingPricePerLitre] = useState(175);
   const [customerDailyProduction, setCustomerDailyProduction] = useState(1000);
 
   // Profit Calculations (using correct logic)

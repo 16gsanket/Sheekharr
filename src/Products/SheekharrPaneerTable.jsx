@@ -135,22 +135,31 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
               )}
             </div>
             <div className="flex gap-2">
-              <input
-                className="border rounded p-1 w-1/2"
-                type="number"
-                value={ing.quantity}
-                onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
-                placeholder="Quantity (kg)"
-                min="0"
-              />
-              <input
-                className="border rounded p-1 w-1/2"
-                type="number"
-                value={ing.price}
-                onChange={e => handleIngredientChange(idx, 'price', e.target.value)}
-                placeholder="Price per kg"
-                min="0"
-              />
+              {/* Quantity input with kg suffix */}
+              <div className="relative w-1/2">
+                <input
+                  className="border rounded p-1 pr-8 w-full"
+                  type="number"
+                  value={ing.quantity}
+                  onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
+                  placeholder="Quantity"
+                  min="0"
+                />
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">kg</span>
+              </div>
+              {/* Price input with Rs prefix and per kg suffix */}
+              <div className="relative w-1/2">
+                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">Rs</span>
+                <input
+                  className="border rounded p-1 pl-8 pr-14 w-full"
+                  type="number"
+                  value={ing.price}
+                  onChange={e => handleIngredientChange(idx, 'price', e.target.value)}
+                  placeholder="Price"
+                  min="0"
+                />
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">per kg</span>
+              </div>
             </div>
           </div>
         ))}
@@ -165,24 +174,33 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
             />
           </div>
           <div className="flex gap-2">
-            <input
-              className="border rounded p-1 w-1/2 "
-              type="number"
-              value={coagulantQty}
-              onChange={handleCoagulantQtyChange}
-              onBlur={handleCoagulantQtyBlur}
-              placeholder="Quantity (kg)"
-              min="0"
-            />
-            <input
-              className="border rounded p-1 w-1/2 "
-              type="number"
-              value={coagulantPricePerKg}
-              onChange={handleCoagulantPriceChange}
-              onBlur={handleCoagulantPriceBlur}
-              placeholder="Price per kg"
-              min="0"
-            />
+            {/* Coagulant Quantity input with kg suffix */}
+            <div className="relative w-1/2">
+              <input
+                className="border rounded p-1 pr-8 w-full"
+                type="number"
+                value={coagulantQty}
+                onChange={handleCoagulantQtyChange}
+                onBlur={handleCoagulantQtyBlur}
+                placeholder="Quantity"
+                min="0"
+              />
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">kg</span>
+            </div>
+            {/* Coagulant Price input with Rs prefix and per kg suffix */}
+            <div className="relative w-1/2">
+              <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">Rs</span>
+              <input
+                className="border rounded p-1 pl-8 pr-14 w-full"
+                type="number"
+                value={coagulantPricePerKg}
+                onChange={handleCoagulantPriceChange}
+                onBlur={handleCoagulantPriceBlur}
+                placeholder="Price"
+                min="0"
+              />
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">per kg</span>
+            </div>
           </div>
           <div className="text-xs text-gray-500 mt-1">Dosage: {coagulant.dosagePercent}% of milk</div>
           <div className="text-xs text-gray-500 mt-1">Recommended Dosage : <span className="font-bold">{recommendedCoagulantQty}</span>Kg</div>

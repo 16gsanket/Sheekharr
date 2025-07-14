@@ -24,7 +24,6 @@ function Paneer() {
   // Calculate total milk quantity (always from Milk row) - this will be used for both tables
   const milk = ingredients.find(i => i.name === 'Milk');
   const milkQty = milk ? Number(milk.quantity) : 0;
-  const milkPrice = milk ? Number(milk.price) : 0;
 
   // Calculate yield %
   const yieldPercent = milkQty > 0 ? ((totalPaneer * 100) / milkQty).toFixed(2) : '';
@@ -32,12 +31,6 @@ function Paneer() {
   // Calculate price per kg
   const totalCost = ingredients.reduce((sum, ing) => sum + (Number(ing.quantity) * Number(ing.price)), 0);
   const pricePerKg = totalPaneer > 0 ? (totalCost / totalPaneer).toFixed(2) : '';
-
-  // Customer coagulant cost (find by name)
-  const customerCoagulant = ingredients.find(i => i.name === 'Customer Coagulant');
-  const customerCoagulantQty = customerCoagulant ? Number(customerCoagulant.quantity) : 0;
-  const customerCoagulantPrice = customerCoagulant ? Number(customerCoagulant.price) : 0;
-  const customerCoagulantCost = customerCoagulantQty * customerCoagulantPrice;
 
   // Sheekharr coagulant cost (now using synced milk quantity)
   // Use the same constants as in SheekharrPaneerTable
@@ -47,7 +40,6 @@ function Paneer() {
   };
   const sheekharrCoagulant = COAGULANT_OPTIONS[selectedCoagulant];
   const sheekharrCoagulantQty = milkQty * sheekharrCoagulant.dosagePercent / 100;
-  const sheekharrCoagulantCost = sheekharrCoagulantQty * sheekharrCoagulant.pricePerKg;
 
   // Profit with above batch
   const profitWithBatch = ((Number(sheekharrPaneerQty) - Number(totalPaneer)) * sellingPrice) - (sheekharrCoagulantQty * sheekharrCoagulant.pricePerKg);
@@ -126,22 +118,29 @@ function Paneer() {
                       )}
                     </div>
                     <div className="flex gap-2 w-full">
-                      <input
-                        className="border rounded p-1 w-1/2"
-                        type="number"
-                        value={ing.quantity}
-                        onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
-                        placeholder="Quantity (kg)"
-                        min="0"
-                      />
-                      <input
-                        className="border rounded p-1 w-1/2"
-                        type="number"
-                        value={ing.price}
-                        onChange={e => handleIngredientChange(idx, 'price', e.target.value)}
-                        placeholder="Price per kg"
-                        min="0"
-                      />
+                      <div className="relative w-1/2">
+                        <input
+                          className="border rounded p-1 pr-8 w-full"
+                          type="number"
+                          value={ing.quantity}
+                          onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
+                          placeholder="Quantity"
+                          min="0"
+                        />
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">kg</span>
+                      </div>
+                      <div className="relative w-1/2">
+                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">Rs</span>
+                        <input
+                          className="border rounded p-1 pl-8 pr-14 w-full"
+                          type="number"
+                          value={ing.price}
+                          onChange={e => handleIngredientChange(idx, 'price', e.target.value)}
+                          placeholder="Price"
+                          min="0"
+                        />
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">per kg</span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -222,22 +221,29 @@ function Paneer() {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <input
-                      className="border rounded p-1 w-1/2"
-                      type="number"
-                      value={ing.quantity}
-                      onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
-                      placeholder="Quantity (kg)"
-                      min="0"
-                    />
-                    <input
-                      className="border rounded p-1 w-1/2"
-                      type="number"
-                      value={ing.price}
-                      onChange={e => handleIngredientChange(idx, 'price', e.target.value)}
-                      placeholder="Price per kg"
-                      min="0"
-                    />
+                    <div className="relative w-1/2">
+                      <input
+                        className="border rounded p-1 pr-8 w-full"
+                        type="number"
+                        value={ing.quantity}
+                        onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
+                        placeholder="Quantity"
+                        min="0"
+                      />
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">kg</span>
+                    </div>
+                    <div className="relative w-1/2">
+                      <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">Rs</span>
+                      <input
+                        className="border rounded p-1 pl-8 pr-14 w-full"
+                        type="number"
+                        value={ing.price}
+                        onChange={e => handleIngredientChange(idx, 'price', e.target.value)}
+                        placeholder="Price"
+                        min="0"
+                      />
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">per kg</span>
+                    </div>
                   </div>
                 </div>
               ))}
