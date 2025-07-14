@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import SheekharrPaneerTable from './SheekharrPaneerTable';
+import { SC900 , SC600 } from '../Constants/configuration';
 
 const defaultIngredients = [
   { name: 'Milk', quantity: 300, price: 36, isFixed: true },
   { name: 'Customer Coagulant', quantity: 0.6, price: 160, isFixed: true },
 ];
 
+// This configurations for WEB APP's local storage data , not required in PWAs
 const LOCAL_STORAGE_KEY = 'paneerCalcData';
 const EXPIRY_HOURS = 4;
 
@@ -40,8 +42,8 @@ function Paneer() {
   // Sheekharr coagulant cost (now using synced milk quantity)
   // Use the same constants as in SheekharrPaneerTable
   const COAGULANT_OPTIONS = {
-    'SC-600': { dosagePercent: 0.36, pricePerKg: 600 },
-    'SC-900': { dosagePercent: 0.37, pricePerKg: 750 },
+    'SC-600': { dosagePercent: SC600.dosagePercent, pricePerKg: SC600.pricePerKg },
+    'SC-900': { dosagePercent: SC900.dosagePercent, pricePerKg: SC900.pricePerKg },
   };
   const sheekharrCoagulant = COAGULANT_OPTIONS[selectedCoagulant];
   const sheekharrCoagulantQty = milkQty * sheekharrCoagulant.dosagePercent / 100;

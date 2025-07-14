@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { SC900 , SC600 } from '../Constants/configuration';
 
 // Coagulant options: dosage % and price per kg (edit here to change values)
+// Coagulant options: dosage % and price per kg can be foind in configuration.js
 const COAGULANT_OPTIONS = {
-  'SC-600': { dosagePercent: 0.36, pricePerKg: 600 },
-  'SC-900': { dosagePercent: 0.37, pricePerKg: 750 },
+  'SC-600': { dosagePercent: SC600.dosagePercent, pricePerKg: SC600.pricePerKg },
+  'SC-900': { dosagePercent: SC900.dosagePercent , pricePerKg: SC900.pricePerKg },
 };
 
 const defaultIngredients = [

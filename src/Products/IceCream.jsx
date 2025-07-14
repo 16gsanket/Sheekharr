@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { CreamTecIC } from '../Constants/configuration';
+
+console.log(CreamTecIC.dosagePercent)
 
 const defaultCustomerIngredients = [
   { name: 'Milk', quantity: 73.25, price: 38, isFixed: true },
@@ -16,7 +19,7 @@ const defaultSheekharrIngredients = [
   { name: 'SMP', quantity: 4, price: 340, isFixed: true },
   { name: 'Sugar', quantity: 15, price: 45, isFixed: true },
   { name: 'Flavour', quantity: 0.2, price: 600, isFixed: true },
-  { name: 'CreamTec IC Pro', quantity: 1, price: 499, isFixed: true, dosageRemark: '1% of Icecream Mix', dosagePercent: 1 },
+  { name: 'CreamTec IC Pro', quantity: 1, price: 499, isFixed: true, dosageRemark: '1% of Icecream Mix', dosagePercent: CreamTecIC.dosagePercent },
   { name: 'Water', quantity: 1.95, price: 0.1, isFixed: true },
 ];
 
