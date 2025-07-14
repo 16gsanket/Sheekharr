@@ -12,7 +12,7 @@
     const SC600 = {
         name : 'SC-600',
         dosagePercent : 0.36,
-        pricePerKg : 600
+        pricePerKg : 750
     }
 
 
