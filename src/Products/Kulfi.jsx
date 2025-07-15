@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const defaultIngredients = [
-  { name: 'Milk (6% fat, 9% SNF)', quantity: 140, price: 50 },
+  { name: 'Milk', quantity: 140, price: 50 },
   { name: 'Milk Fat', quantity: 3, price: 450 },
   { name: 'SMP', quantity: 0, price: 360 },
   { name: 'Sugar', quantity: 15, price: 40 },
@@ -78,7 +78,7 @@ function Kulfi() {
 
   // Profit per kg: customer table price per kg - sheekharr table price per kg
   const profitPerKg = (totalPricePerKg && sheekharrTotalPricePerKg)
-    ? (Number(totalPricePerKg) - Number(sheekharrTotalPricePerKg)).toFixed(1)
+    ? (Number(totalPricePerKg) - Number(sheekharrTotalPricePerKg)).toFixed(2)
     : '';
 
   const customerDailyExtraProfit = (profitPerKg && customerDailyProduction)

@@ -1,6 +1,6 @@
 function ProductSelector({ product, setProduct }) {
   return (
-    <div className="p-4 max-w-md mx-auto">
+    <div className="p-4 max-w-md mx-auto pt-24">
       <label htmlFor="product-select" className="font-bold mr-2">Select Product:</label>
       <select
         id="product-select"
