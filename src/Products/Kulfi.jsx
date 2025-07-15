@@ -225,6 +225,19 @@ function Kulfi() {
             ))}
           </tbody>
         </table>
+        {sheekharrIngredients.some(ing => ing.name === 'CreamTec KF Pro') && (
+          <div className="flex items-center gap-2 flex-col">
+            <div className="ml-1 text-xs text-gray-500 mt-1">
+              Dosage : {(() => {
+                const kf = sheekharrIngredients.find(ing => ing.name === 'CreamTec KF Pro');
+                return sheekharrFinalProductKg > 0 && kf ? ((Number(kf.quantity) / Number(sheekharrFinalProductKg)) * 100).toFixed(2) : '0';
+              })()}% of final finished product
+            </div>
+            <div className="ml-1 text-xs text-gray-500 mt-1">
+              Recommended Dosage : 0.9% of final finished product
+            </div>
+          </div>
+        )}
         <button
           className="w-full bg-blue-100 text-blue-900 rounded py-2 font-semibold mb-4"
           onClick={addSheekharrIngredient}
