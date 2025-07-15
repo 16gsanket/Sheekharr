@@ -256,7 +256,7 @@ function Kulfi() {
           />
         </div>
         <div className="flex items-center gap-2">
-          <label className="font-semibold flex-1">Total Icecream price per kg:</label>
+          <label className="font-semibold flex-1">Total Kulfi price per kg:</label>
           <span className="bg-blue-100 text-blue-900 rounded px-3 py-1 min-w-[80px] text-right font-bold">{sheekharrTotalPricePerKg}</span>
         </div>
       </div>
