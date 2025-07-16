@@ -182,7 +182,7 @@ function Kulfi() {
       </div>
       {/* Sheekharr (CreamTec KF Pro) Table */}
       <div className="bg-white rounded shadow p-4 max-w-md mx-auto mt-8">
-        <h2 className="text-lg font-bold mb-4 text-blue-900">CreamTec KF Pro Added - Pro Price Scenario</h2>
+        <h2 className="text-lg font-bold mb-4 text-blue-900">CreamTec KF Pro Added Kulfi Price Scenario</h2>
         <table className="w-full mb-4">
           <thead>
             <tr className="bg-slate-100">
@@ -289,7 +289,7 @@ function Kulfi() {
           />
         </div>
         <div className="flex items-center gap-2">
-          <label className="font-semibold flex-1">Profit with Above batch per kg (Rs):</label>
+          <label className="font-semibold flex-1">Profit with above batch per kg (Rs):</label>
           <span className="bg-blue-100 text-blue-900 rounded px-3 py-1 min-w-[80px] text-right font-bold">{profitPerKg}</span>
         </div>
         <div className="flex items-center gap-2">

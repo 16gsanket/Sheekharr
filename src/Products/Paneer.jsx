@@ -319,7 +319,7 @@ function Paneer() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <label className="font-semibold flex-1">Profit with Above Batch (Rs):</label>
+              <label className="font-semibold flex-1">Profit with above Batch (Rs):</label>
               <span className="bg-blue-100 text-blue-900 rounded px-3 py-1 min-w-[80px] text-right font-bold">{profitWithBatch.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
             </div>
           </div>

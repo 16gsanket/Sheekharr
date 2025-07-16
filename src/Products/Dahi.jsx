@@ -255,7 +255,7 @@ function Dahi() {
       {/* --- Summary/Profit Section --- */}
       <div className="bg-white rounded shadow p-4 max-w-md mx-auto mt-8 space-y-4">
         <div className="flex items-center gap-2">
-          <label className="font-semibold flex-1">Profit with Above batch per kg (Rs):</label>
+          <label className="font-semibold flex-1">Profit with above batch per kg (Rs):</label>
           <span className="bg-blue-100 text-blue-900 rounded px-3 py-1 min-w-[60px] text-right font-bold">{profitPerKg}</span>
         </div>
         <div className="flex items-center gap-2">
