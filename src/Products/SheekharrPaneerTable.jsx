@@ -13,26 +13,30 @@ const defaultIngredients = [
   // Coagulant row will be handled separately
 ];
 
-function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, customerYieldPercent, paneerQty, setPaneerQty }) {
-  const [selectedCoagulant, setSelectedCoagulant] = useState('SC-900');
+function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, customerYieldPercent, paneerQty, setPaneerQty, selectedCoagulant, setSelectedCoagulant, coagulantQty, setCoagulantQty, coagulantPrice, setCoagulantPrice }) {
   const [ingredients, setIngredients] = useState(defaultIngredients.map(ing => ({ ...ing, quantity: ing.name === 'Milk' ? milkQty : ing.quantity, price: ing.name === 'Milk' ? milkPrice : ing.price })));
 
-  // New state for editable coagulant fields
+  // New state for editable coagulant fields (fallback to local if not provided)
   const coagulant = COAGULANT_OPTIONS[selectedCoagulant];
   const autoCoagulantQty = milkQty > 0 ? (milkQty * coagulant.dosagePercent / 100) : 0;
-  const recommendedCoagulantQty = milkQty > 0 ? (milkQty * coagulant.dosagePercent / 100) : 0;
   const autoCoagulantPricePerKg = coagulant.pricePerKg;
-  const [coagulantQty, setCoagulantQty] = useState(autoCoagulantQty);
-  const [coagulantPricePerKg, setCoagulantPricePerKg] = useState(autoCoagulantPricePerKg);
+  const [localCoagulantQty, setLocalCoagulantQty] = useState(autoCoagulantQty);
+  const [localCoagulantPrice, setLocalCoagulantPrice] = useState(autoCoagulantPricePerKg);
+
+  // Use prop state if provided, else local
+  const effectiveCoagulantQty = typeof coagulantQty !== 'undefined' ? coagulantQty : localCoagulantQty;
+  const effectiveSetCoagulantQty = setCoagulantQty || setLocalCoagulantQty;
+  const effectiveCoagulantPrice = typeof coagulantPrice !== 'undefined' ? coagulantPrice : localCoagulantPrice;
+  const effectiveSetCoagulantPrice = setCoagulantPrice || setLocalCoagulantPrice;
 
   // Sync coagulant fields with auto values when dependencies change, unless user has overridden
   React.useEffect(() => {
-    setCoagulantQty(autoCoagulantQty);
-    setCoagulantPricePerKg(autoCoagulantPricePerKg);
+    if (!setCoagulantQty) setLocalCoagulantQty(autoCoagulantQty);
+    if (!setCoagulantPrice) setLocalCoagulantPrice(autoCoagulantPricePerKg);
   }, [selectedCoagulant, milkQty]);
 
   // Calculate coagulant cost
-  const coagulantCost = (Number(coagulantQty) || 0) * (Number(coagulantPricePerKg) || 0);
+  const coagulantCost = (Number(effectiveCoagulantQty) || 0) * (Number(effectiveCoagulantPrice) || 0);
 
   // Calculate yield %
   const yieldPercent = milkQty > 0 ? ((paneerQty * 100) / milkQty).toFixed(2) : '';
@@ -179,9 +183,11 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
               <input
                 className="border rounded p-1 pr-8 w-full"
                 type="number"
-                value={coagulantQty}
-                onChange={handleCoagulantQtyChange}
-                onBlur={handleCoagulantQtyBlur}
+                value={effectiveCoagulantQty}
+                onChange={e => effectiveSetCoagulantQty(e.target.value === '' || isNaN(Number(e.target.value)) ? '' : Number(e.target.value))}
+                onBlur={() => {
+                  if (effectiveCoagulantQty === '' || isNaN(Number(effectiveCoagulantQty))) effectiveSetCoagulantQty(autoCoagulantQty);
+                }}
                 placeholder="Quantity"
                 min="0"
               />
@@ -193,9 +199,11 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
               <input
                 className="border rounded p-1 pl-8 pr-14 w-full"
                 type="number"
-                value={coagulantPricePerKg}
-                onChange={handleCoagulantPriceChange}
-                onBlur={handleCoagulantPriceBlur}
+                value={effectiveCoagulantPrice}
+                onChange={e => effectiveSetCoagulantPrice(e.target.value === '' || isNaN(Number(e.target.value)) ? '' : Number(e.target.value))}
+                onBlur={() => {
+                  if (effectiveCoagulantPrice === '' || isNaN(Number(effectiveCoagulantPrice))) effectiveSetCoagulantPrice(autoCoagulantPricePerKg);
+                }}
                 placeholder="Price"
                 min="0"
               />
@@ -204,8 +212,8 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
           </div>
           <div className="text-xs text-gray-500 mt-1">
             Dosage: {(() => {
-              const totalMix = ingredients.reduce((sum, ing) => sum + (Number(ing.quantity) || 0), 0) + (Number(coagulantQty) || 0);
-              return totalMix > 0 ? ((Number(coagulantQty) / totalMix) * 100).toFixed(2) : '0';
+              const totalMix = ingredients.reduce((sum, ing) => sum + (Number(ing.quantity) || 0), 0) + (Number(effectiveCoagulantQty) || 0);
+              return totalMix > 0 ? ((Number(effectiveCoagulantQty) / totalMix) * 100).toFixed(2) : '0';
             })()}% of total mix
           </div>
           <div className="text-xs text-gray-500 mt-1">Recommended Dosage : <span className="font-bold">{coagulant.dosagePercent}% of milk </span></div>

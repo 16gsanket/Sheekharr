@@ -24,7 +24,14 @@ function Kulfi() {
   const handleIngredientChange = (idx, field, value) => {
     setIngredients(ings =>
       ings.map((ing, i) =>
-        i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
+        i === idx
+          ? {
+              ...ing,
+              [field]: (field === 'quantity' || field === 'price')
+                ? (value === '' || isNaN(Number(value)) ? '' : Number(value))
+                : value
+            }
+          : ing
       )
     );
   };
@@ -59,7 +66,14 @@ function Kulfi() {
   const handleSheekharrIngredientChange = (idx, field, value) => {
     setSheekharrIngredients(ings =>
       ings.map((ing, i) =>
-        i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
+        i === idx
+          ? {
+              ...ing,
+              [field]: (field === 'quantity' || field === 'price')
+                ? (value === '' || isNaN(Number(value)) ? '' : Number(value))
+                : value
+            }
+          : ing
       )
     );
   };
@@ -230,11 +244,10 @@ function Kulfi() {
             <div className="ml-1 text-xs text-gray-500 mt-1">
               Dosage : {(() => {
                 const kf = sheekharrIngredients.find(ing => ing.name === 'CreamTec KF Pro');
-                const totalMix = sheekharrIngredients.reduce((sum, ing) => sum + (Number(ing.quantity) || 0), 0);
-                return totalMix > 0 && kf ? ((Number(kf.quantity) / totalMix) * 100).toFixed(2) : '0';
-              })()}% of total mix
+                return sheekharrFinalProductKg > 0 && kf ? ((Number(kf.quantity) / Number(sheekharrFinalProductKg)) * 100).toFixed(2) : '0';
+              })()}% of final finished product
             </div>
-            <div className="ml-1 text-xs text-gray-500 mt-1">
+            <div className="ml-1 text-xs text-gray-500 mt-1 mb-5">
               Recommended Dosage : 0.9% of final finished product
             </div>
           </div>
