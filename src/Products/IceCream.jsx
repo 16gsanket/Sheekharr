@@ -65,7 +65,15 @@ function IceCream() {
   const handleCustomerIngredientChange = (idx, field, value) => {
     setCustomerIngredients(ings =>
       ings.map((ing, i) =>
-        i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
+        i === idx
+          ? {
+              ...ing,
+              [field]:
+                field === 'quantity' || field === 'price'
+                  ? value === '' ? '' : Number(value)
+                  : value // for 'name', just use the string
+            }
+          : ing
       )
     );
   };

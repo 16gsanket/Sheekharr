@@ -12,7 +12,7 @@ const defaultSheekharrIngredients = [
   { name: 'SMP', quantity: 1.1, price: 340, isFixed: true },
   { name: 'Culture', quantity: 0.005, price: 8000, isFixed: true },
   { name: 'Flavour', quantity: 0.2, price: 600, isFixed: true },
-  { name: 'CreamTec FFM', quantity: 0.8, price: 249, isFixed: true },
+  { name: 'CreamTec CA', quantity: 0.8, price: 249, isFixed: true },
 ];
 
 function Dahi() {
@@ -164,7 +164,7 @@ function Dahi() {
       </div>
       {/* Sheekharr Table Card */}
       <div className="bg-white rounded shadow p-4 max-w-md mx-auto mt-8">
-        <h2 className="text-lg font-bold mb-4 text-blue-900">CreamTec FFM added Flavoured Dahi Price Scenario</h2>
+        <h2 className="text-lg font-bold mb-4 text-blue-900">CreamTec CA added Flavoured Dahi Price Scenario</h2>
         <table className="w-full mb-4">
           <thead>
             <tr className="bg-slate-100">
@@ -220,15 +220,15 @@ function Dahi() {
                     )}
                   </td>
                 </tr>
-                {/* Dosage and Recommended Dosage for CreamTec FFM */}
-                {ing.name === 'CreamTec FFM' && (
+                {/* Dosage and Recommended Dosage for CreamTec CA */}
+                {ing.name === 'CreamTec CA' && (
                   <tr>
                     <td colSpan={4} className="pl-4 pb-1 pt-0 align-top">
                       <div className="ml-1 text-xs text-gray-500 mt-1">
                         Dosage: {sheekharrTotalQuantity > 0 ? ((ing.quantity / sheekharrTotalQuantity) * 100).toFixed(2) : '0'}% of Final Finished Product
                       </div>
                       <div className="ml-1 text-xs text-gray-500 mt-1">
-                        Recommended Dosage: 1% of Final Finished Product
+                        Recommended Dosage: 0.8% of Final Finished Product
                       </div>
                     </td>
                   </tr>

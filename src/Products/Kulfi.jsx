@@ -52,7 +52,7 @@ function Kulfi() {
     { name: 'Sugar', quantity: 15, price: 40 },
     { name: 'Flavour', quantity: 0.1, price: 600 },
     { name: 'Stabilizers', quantity: 0, price: 400 },
-    { name: 'CreamTec KF Pro', quantity: 1, price: 499 },
+    { name: 'KF Pro', quantity: 1, price: 499 },
   ];
   const [sheekharrIngredients, setSheekharrIngredients] = useState(defaultSheekharrIngredients);
   const [sheekharrFinalProductKg, setSheekharrFinalProductKg] = useState(100);
@@ -177,7 +177,7 @@ function Kulfi() {
         />
       </div>
       <div className="flex items-center gap-2">
-        <label className="font-semibold flex-1">Total Icecream price per kg:</label>
+        <label className="font-semibold flex-1">Total Kulfi price per kg:</label>
         <span className="bg-blue-100 text-blue-900 rounded px-3 py-1 min-w-[80px] text-right font-bold">{totalPricePerKg}</span>
       </div>
       {/* Sheekharr (CreamTec KF Pro) Table */}

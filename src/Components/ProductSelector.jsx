@@ -11,7 +11,8 @@ function ProductSelector({ product, setProduct }) {
         <option value="Paneer">Paneer</option>
         <option value="Ice Cream">Ice Cream</option>
         <option value="Kulfi">Kulfi</option>
-        <option value="Dahi">Dahi</option>
+        <option value="Dahi">Flavoured Dahi</option>
+        <option value="Flavoured Milk">Flavoured Milk</option>
       </select>
     </div>
   );
