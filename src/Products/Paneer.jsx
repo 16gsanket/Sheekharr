@@ -78,12 +78,16 @@ function Paneer() {
 
   // Customer Table: update ingredients and totalPaneer as numbers
   const handleIngredientChange = (idx, field, value) => {
-    setIngredients(ings => ings.map((ing, i) => i === idx ? { ...ing, [field]: field === 'quantity' || field === 'price' ? Number(value) : value } : ing));
+    setIngredients(ings =>
+      ings.map((ing, i) =>
+        i === idx ? { ...ing, [field]: field === 'quantity' || field === 'price' ? (value === '' ? '' : Number(value)) : value } : ing
+      )
+    );
   };
 
   // Customer Table: update totalPaneer as number
   const handleTotalPaneerChange = (value) => {
-    setTotalPaneer(Number(value));
+    setTotalPaneer(value === '' ? '' : Number(value));
   };
 
   return (
@@ -304,7 +308,7 @@ function Paneer() {
                 className="border rounded p-1 w-24 text-right"
                 type="number"
                 value={sellingPrice}
-                onChange={e => setSellingPrice(Number(e.target.value))}
+                onChange={e => setSellingPrice(e.target.value === '' ? '' : Number(e.target.value))}
                 min="0"
               />
             </div>
@@ -321,7 +325,7 @@ function Paneer() {
                 className="border rounded p-1 w-24 text-right"
                 type="number"
                 value={customerDailyProduction}
-                onChange={e => setCustomerDailyProduction(Number(e.target.value))}
+                onChange={e => setCustomerDailyProduction(e.target.value === '' ? '' : Number(e.target.value))}
                 min="0"
               />
             </div>

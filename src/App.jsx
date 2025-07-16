@@ -4,7 +4,7 @@ import ProductSelector from "./Components/ProductSelector";
 import Paneer from "./Products/Paneer";
 import IceCream from "./Products/IceCream";
 import Kulfi from "./Products/Kulfi";
-
+import Dahi from "./Products/Dahi";
 
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
   if (product === "Paneer") ProductComponent = <Paneer />;
   else if (product === "Ice Cream") ProductComponent = <IceCream />;
   else if (product === "Kulfi") ProductComponent = <Kulfi />;
+  else if (product === "Dahi") ProductComponent = <Dahi />;
 
   return (
     <div className="font-sans min-h-screen bg-slate-50">
