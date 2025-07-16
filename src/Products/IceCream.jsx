@@ -83,16 +83,37 @@ function IceCream() {
   const removeCustomerIngredient = idx => {
     setCustomerIngredients(ings => ings.filter((_, i) => i !== idx));
   };
+
+  // const handleCreamtecIngredientChange = (idx, field, value) => {
+  //   setCreamtecIngredients(ings =>
+  //     ings.map((ing, i) =>
+  //       i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
+  //     )
+  //   );
+  //   if (creamtecIngredients[idx].name === 'CreamTec IC Pro' && field === 'quantity') {
+  //     setCreamTecProOverridden(true);
+  //   }
+  // };
+
   const handleCreamtecIngredientChange = (idx, field, value) => {
     setCreamtecIngredients(ings =>
       ings.map((ing, i) =>
-        i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
+        i === idx
+          ? {
+              ...ing,
+              [field]:
+                field === 'quantity' || field === 'price'
+                  ? value === '' ? '' : Number(value)
+                  : value // for 'name', just use the string
+            }
+          : ing
       )
     );
     if (creamtecIngredients[idx].name === 'CreamTec IC Pro' && field === 'quantity') {
       setCreamTecProOverridden(true);
     }
   };
+
   const addCreamtecIngredient = () => {
     setCreamtecIngredients([...creamtecIngredients, { name: '', quantity: '', price: '', isFixed: false }]);
   };
