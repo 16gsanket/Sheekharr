@@ -202,7 +202,12 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">per kg</span>
             </div>
           </div>
-          <div className="text-xs text-gray-500 mt-1">Dosage: {coagulantQty}% of milk</div>
+          <div className="text-xs text-gray-500 mt-1">
+            Dosage: {(() => {
+              const totalMix = ingredients.reduce((sum, ing) => sum + (Number(ing.quantity) || 0), 0) + (Number(coagulantQty) || 0);
+              return totalMix > 0 ? ((Number(coagulantQty) / totalMix) * 100).toFixed(2) : '0';
+            })()}% of total mix
+          </div>
           <div className="text-xs text-gray-500 mt-1">Recommended Dosage : <span className="font-bold">{coagulant.dosagePercent}% of milk </span></div>
         </div>
         <button

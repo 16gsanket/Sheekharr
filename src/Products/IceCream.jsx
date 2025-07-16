@@ -16,8 +16,8 @@ const creamtecDefaultIngredients = [
   { name: 'SMP', quantity: 4, price: 340, isFixed: true },
   { name: 'Sugar', quantity: 15, price: 45, isFixed: true },
   { name: 'Flavour', quantity: 0.2, price: 600, isFixed: true },
-  { name: 'CreamTec IC Pro', quantity: 1, price: 499, isFixed: true, dosageRemark: '1% of Icecream Mix' },
   { name: 'Water', quantity: 1.95, price: 0.1, isFixed: true },
+  { name: 'CreamTec IC Pro', quantity: 1, price: 499, isFixed: true, dosageRemark: '1% of Icecream Mix' },
 ];
 
 function IceCream() {
@@ -48,7 +48,7 @@ function IceCream() {
   const creamtecTotalMixExclCreamTec = creamtecIngredients
     .filter(ing => ing.name !== 'CreamTec IC Pro')
     .reduce((sum, ing) => sum + Number(ing.quantity || 0), 0);
-  const autoCalcCreamTecProQty = creamtecTotalMixExclCreamTec * 0.01;
+  const autoCalcCreamTecProQty = Number((creamtecTotalMixExclCreamTec * 0.01).toFixed(2));
 
   // useEffect to update CreamTec IC Pro quantity if not overridden
   useEffect(() => {
@@ -62,20 +62,34 @@ function IceCream() {
   }, [autoCalcCreamTecProQty, creamTecProOverridden]);
 
   // Handler for ingredient change (including override logic for CreamTec IC Pro)
+  const handleCustomerIngredientChange = (idx, field, value) => {
+    setCustomerIngredients(ings =>
+      ings.map((ing, i) =>
+        i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
+      )
+    );
+  };
+  const addCustomerIngredient = () => {
+    setCustomerIngredients([...customerIngredients, { name: '', quantity: '', price: '', isFixed: false }]);
+  };
+  const removeCustomerIngredient = idx => {
+    setCustomerIngredients(ings => ings.filter((_, i) => i !== idx));
+  };
   const handleCreamtecIngredientChange = (idx, field, value) => {
     setCreamtecIngredients(ings =>
       ings.map((ing, i) =>
-        i === idx
-          ? {
-              ...ing,
-              [field]: field === 'quantity' || field === 'price' ? Number(value) : value,
-            }
-          : ing
+        i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
       )
     );
     if (creamtecIngredients[idx].name === 'CreamTec IC Pro' && field === 'quantity') {
       setCreamTecProOverridden(true);
     }
+  };
+  const addCreamtecIngredient = () => {
+    setCreamtecIngredients([...creamtecIngredients, { name: '', quantity: '', price: '', isFixed: false }]);
+  };
+  const removeCreamtecIngredient = idx => {
+    setCreamtecIngredients(ings => ings.filter((_, i) => i !== idx));
   };
 
   // Handler to reset CreamTec IC Pro to auto-calc
@@ -129,6 +143,15 @@ function IceCream() {
                   placeholder="Ingredient Name"
                   disabled={ing.isFixed}
                 />
+                {!ing.isFixed && (
+                  <button
+                    className="text-red-500 font-bold ml-2"
+                    onClick={() => removeCustomerIngredient(idx)}
+                    aria-label="Remove ingredient"
+                  >
+                    ×
+                  </button>
+                )}
               </div>
               <div className="flex gap-2 items-center">
                 <div className="relative w-1/2">
@@ -136,7 +159,7 @@ function IceCream() {
                     className="border rounded p-1 pr-8 w-full"
                     type="number"
                     value={ing.quantity}
-                    onChange={e => setCustomerIngredients(ings => ings.map((item, i) => i === idx ? { ...item, quantity: Number(e.target.value) } : item))}
+                    onChange={e => handleCustomerIngredientChange(idx, 'quantity', e.target.value)}
                     placeholder="Quantity"
                     min="0"
                   />
@@ -148,7 +171,7 @@ function IceCream() {
                     className="border rounded p-1 pl-8 pr-14 w-full"
                     type="number"
                     value={ing.price}
-                    onChange={e => setCustomerIngredients(ings => ings.map((item, i) => i === idx ? { ...item, price: Number(e.target.value) } : item))}
+                    onChange={e => handleCustomerIngredientChange(idx, 'price', e.target.value)}
                     placeholder="Price"
                     min="0"
                   />
@@ -157,6 +180,12 @@ function IceCream() {
               </div>
             </div>
           ))}
+          <button
+            className="w-full bg-blue-100 text-blue-900 rounded py-2 font-semibold mt-2"
+            onClick={addCustomerIngredient}
+          >
+            + Add Ingredient
+          </button>
         </div>
         <div className="mt-6 space-y-3">
           <div className="flex items-center gap-2">
@@ -173,7 +202,7 @@ function IceCream() {
               className="border rounded p-1 w-24 text-right"
               type="number"
               value={customerOverrun}
-              onChange={e => setCustomerOverrun(Number(e.target.value))}
+              onChange={e => setCustomerOverrun(e.target.value === '' ? '' : Number(e.target.value))}
               min="0"
             />
           </div>
@@ -198,6 +227,15 @@ function IceCream() {
                   placeholder="Ingredient Name"
                   disabled={ing.isFixed}
                 />
+                {!ing.isFixed && (
+                  <button
+                    className="text-red-500 font-bold ml-2"
+                    onClick={() => removeCreamtecIngredient(idx)}
+                    aria-label="Remove ingredient"
+                  >
+                    ×
+                  </button>
+                )}
                 {/* Reset button for CreamTec IC Pro */}
                 
               </div>
@@ -239,6 +277,12 @@ function IceCream() {
               )}
             </div>
           ))}
+          <button
+            className="w-full bg-blue-100 text-blue-900 rounded py-2 font-semibold mt-2"
+            onClick={addCreamtecIngredient}
+          >
+            + Add Ingredient
+          </button>
         </div>
         <div className="mt-6 space-y-3">
           <div className="flex items-center gap-2">
@@ -255,7 +299,7 @@ function IceCream() {
               className="border rounded p-1 w-24 text-right"
               type="number"
               value={creamtecOverrun}
-              onChange={e => setCreamtecOverrun(Number(e.target.value))}
+              onChange={e => setCreamtecOverrun(e.target.value === '' ? '' : Number(e.target.value))}
               min="0"
             />
           </div>
@@ -273,7 +317,7 @@ function IceCream() {
             className="border rounded p-1 w-24 text-right"
             type="number"
             value={sellingPricePerKg}
-            onChange={e => setSellingPricePerKg(Number(e.target.value))}
+            onChange={e => setSellingPricePerKg(e.target.value === '' ? '' : Number(e.target.value))}
             min="0"
           />
         </div>
@@ -291,7 +335,7 @@ function IceCream() {
             className="border rounded p-1 w-24 text-right"
             type="number"
             value={dailyProduction}
-            onChange={e => setDailyProduction(Number(e.target.value))}
+            onChange={e => setDailyProduction(e.target.value === '' ? '' : Number(e.target.value))}
             min="0"
           />
         </div>

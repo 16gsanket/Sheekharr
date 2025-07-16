@@ -24,7 +24,7 @@ function Kulfi() {
   const handleIngredientChange = (idx, field, value) => {
     setIngredients(ings =>
       ings.map((ing, i) =>
-        i === idx ? { ...ing, [field]: value } : ing
+        i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
       )
     );
   };
@@ -59,7 +59,7 @@ function Kulfi() {
   const handleSheekharrIngredientChange = (idx, field, value) => {
     setSheekharrIngredients(ings =>
       ings.map((ing, i) =>
-        i === idx ? { ...ing, [field]: value } : ing
+        i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
       )
     );
   };
@@ -159,7 +159,7 @@ function Kulfi() {
           value={finalProductKg}
           min="0"
           step="any"
-          onChange={e => setFinalProductKg(Number(e.target.value))}
+          onChange={e => setFinalProductKg(e.target.value === '' ? '' : Number(e.target.value))}
         />
       </div>
       <div className="flex items-center gap-2">
@@ -230,8 +230,9 @@ function Kulfi() {
             <div className="ml-1 text-xs text-gray-500 mt-1">
               Dosage : {(() => {
                 const kf = sheekharrIngredients.find(ing => ing.name === 'CreamTec KF Pro');
-                return sheekharrFinalProductKg > 0 && kf ? ((Number(kf.quantity) / Number(sheekharrFinalProductKg)) * 100).toFixed(2) : '0';
-              })()}% of final finished product
+                const totalMix = sheekharrIngredients.reduce((sum, ing) => sum + (Number(ing.quantity) || 0), 0);
+                return totalMix > 0 && kf ? ((Number(kf.quantity) / totalMix) * 100).toFixed(2) : '0';
+              })()}% of total mix
             </div>
             <div className="ml-1 text-xs text-gray-500 mt-1">
               Recommended Dosage : 0.9% of final finished product
@@ -252,11 +253,11 @@ function Kulfi() {
             value={sheekharrFinalProductKg}
             min="0"
             step="any"
-            onChange={e => setSheekharrFinalProductKg(Number(e.target.value))}
+            onChange={e => setSheekharrFinalProductKg(e.target.value === '' ? '' : Number(e.target.value))}
           />
         </div>
         <div className="flex items-center gap-2">
-          <label className="font-semibold flex-1">Total Icecream price per kg:</label>
+          <label className="font-semibold flex-1">Total Kulfi price per kg:</label>
           <span className="bg-blue-100 text-blue-900 rounded px-3 py-1 min-w-[80px] text-right font-bold">{sheekharrTotalPricePerKg}</span>
         </div>
       </div>
