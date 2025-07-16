@@ -21,6 +21,10 @@ function Paneer() {
   const [selectedCoagulant, setSelectedCoagulant] = useState('SC-900');
   const [sellingPrice, setSellingPrice] = useState(280);
 
+  // --- LIFTED STATE FOR COAGULANT FIELDS ---
+  const [sheekharrCoagulantQty, setSheekharrCoagulantQty] = useState(3); // default: 1% of 300kg
+  const [sheekharrCoagulantPrice, setSheekharrCoagulantPrice] = useState(160); // default price
+
   // Calculate total milk quantity (always from Milk row) - this will be used for both tables
   const milk = ingredients.find(i => i.name === 'Milk');
   const milkQty = milk ? Number(milk.quantity) : 0;
@@ -32,17 +36,11 @@ function Paneer() {
   const totalCost = ingredients.reduce((sum, ing) => sum + (Number(ing.quantity) * Number(ing.price)), 0);
   const pricePerKg = totalPaneer > 0 ? (totalCost / totalPaneer).toFixed(2) : '';
 
-  // Sheekharr coagulant cost (now using synced milk quantity)
-  // Use the same constants as in SheekharrPaneerTable
-  const COAGULANT_OPTIONS = {
-    'SC-600': { dosagePercent: SC600.dosagePercent, pricePerKg: SC600.pricePerKg },
-    'SC-900': { dosagePercent: SC900.dosagePercent, pricePerKg: SC900.pricePerKg },
-  };
-  const sheekharrCoagulant = COAGULANT_OPTIONS[selectedCoagulant];
-  const sheekharrCoagulantQty = milkQty * sheekharrCoagulant.dosagePercent / 100;
+  // Sheekharr coagulant cost (now using lifted state)
+  const sheekharrCoagulantCost = (Number(sheekharrCoagulantQty) || 0) * (Number(sheekharrCoagulantPrice) || 0);
 
-  // Profit with above batch
-  const profitWithBatch = ((Number(sheekharrPaneerQty) - Number(totalPaneer)) * sellingPrice) - (sheekharrCoagulantQty * sheekharrCoagulant.pricePerKg);
+  // Profit with above batch (now using lifted state)
+  const profitWithBatch = ((Number(sheekharrPaneerQty) - Number(totalPaneer)) * sellingPrice) - sheekharrCoagulantCost;
 
   const [customerDailyProduction, setCustomerDailyProduction] = useState(1000);
 
@@ -57,7 +55,10 @@ function Paneer() {
   // Customer Daily Extra Profit (Rs)
   const customerDailyExtraProfit =
     (customerDailyExtraPaneer * sellingPrice) -
-    (((customerDailyProduction + customerDailyExtraPaneer) * (sheekharrCoagulant.pricePerKg * sheekharrCoagulantQty)) / Number(sheekharrPaneerQty));
+    (((customerDailyProduction + customerDailyExtraPaneer) * sheekharrCoagulantCost) / Number(sheekharrPaneerQty));
+
+  // Customer Monthly Extra Profit (Rs)
+  const customerMonthlyExtraProfit = customerDailyExtraProfit * 30;
 
   // Debug logging
   console.log({
@@ -65,16 +66,13 @@ function Paneer() {
     totalPaneer,
     sellingPrice,
     sheekharrCoagulantQty,
-    sheekharrCoagulantPrice: sheekharrCoagulant.pricePerKg,
+    sheekharrCoagulantPrice: sheekharrCoagulantPrice,
     customerDailyProduction,
     sheekharrYieldPercent,
     customerYieldPercentNum,
     customerDailyExtraPaneer,
     customerDailyExtraProfit
   });
-
-  // Customer Monthly Extra Profit (Rs)
-  const customerMonthlyExtraProfit = customerDailyExtraProfit * 30;
 
   // Customer Table: update ingredients and totalPaneer as numbers
   const handleIngredientChange = (idx, field, value) => {
@@ -194,6 +192,10 @@ function Paneer() {
                 setPaneerQty={setSheekharrPaneerQty}
                 selectedCoagulant={selectedCoagulant}
                 setSelectedCoagulant={setSelectedCoagulant}
+                coagulantQty={sheekharrCoagulantQty}
+                setCoagulantQty={setSheekharrCoagulantQty}
+                coagulantPrice={sheekharrCoagulantPrice}
+                setCoagulantPrice={setSheekharrCoagulantPrice}
               />
             </div>
           </div>
@@ -293,6 +295,10 @@ function Paneer() {
             setPaneerQty={setSheekharrPaneerQty}
             selectedCoagulant={selectedCoagulant}
             setSelectedCoagulant={setSelectedCoagulant}
+            coagulantQty={sheekharrCoagulantQty}
+            setCoagulantQty={setSheekharrCoagulantQty}
+            coagulantPrice={sheekharrCoagulantPrice}
+            setCoagulantPrice={setSheekharrCoagulantPrice}
           />
         </div>
       </div>

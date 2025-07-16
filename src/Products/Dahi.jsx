@@ -45,7 +45,14 @@ function Dahi() {
   const handleIngredientChange = (idx, field, value) => {
     setIngredients(ings =>
       ings.map((ing, i) =>
-        i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
+        i === idx
+          ? {
+              ...ing,
+              [field]: (field === 'quantity' || field === 'price')
+                ? (value === '' || isNaN(Number(value)) ? '' : Number(value))
+                : value
+            }
+          : ing
       )
     );
   };
@@ -60,7 +67,14 @@ function Dahi() {
   const handleSheekharrIngredientChange = (idx, field, value) => {
     setSheekharrIngredients(ings =>
       ings.map((ing, i) =>
-        i === idx ? { ...ing, [field]: value === '' ? '' : Number(value) } : ing
+        i === idx
+          ? {
+              ...ing,
+              [field]: (field === 'quantity' || field === 'price')
+                ? (value === '' || isNaN(Number(value)) ? '' : Number(value))
+                : value
+            }
+          : ing
       )
     );
   };
