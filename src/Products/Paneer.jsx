@@ -309,7 +309,7 @@ function Paneer() {
           {/* Group 1: Selling price and profit with above batch */}
           <div className="bg-slate-50 rounded border border-slate-200 p-4 mb-2">
             <div className="flex items-center gap-2 mb-4">
-              <label className="font-semibold flex-1">Paneer Selling Price (Rs):</label>
+              <label className="font-semibold flex-1">Paneer selling price (Rs):</label>
               <input
                 className="border rounded p-1 w-24 text-right"
                 type="number"
@@ -319,14 +319,14 @@ function Paneer() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <label className="font-semibold flex-1">Profit with above Batch (Rs):</label>
+              <label className="font-semibold flex-1">Profit with above batch (Rs):</label>
               <span className="bg-blue-100 text-blue-900 rounded px-3 py-1 min-w-[80px] text-right font-bold">{profitWithBatch.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
             </div>
           </div>
           {/* Group 2: Customer daily production and extra paneer */}
           <div className="bg-slate-50 rounded border border-slate-200 p-4 mb-2">
             <div className="flex items-center gap-2 mb-4">
-              <label className="font-semibold flex-1">Customer Daily Production (kg):</label>
+              <label className="font-semibold flex-1">Customer daily production (kg):</label>
               <input
                 className="border rounded p-1 w-24 text-right"
                 type="number"
@@ -336,7 +336,7 @@ function Paneer() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <label className="font-semibold flex-1">Customer Daily Extra Paneer with Sheekhar Coagulant (kg):</label>
+              <label className="font-semibold flex-1">Customer daily extra Paneer with Sheekhar Coagulant (kg):</label>
               <span className="bg-blue-100 text-blue-900 rounded px-3 py-1 min-w-[80px] text-right font-bold">{customerDailyExtraPaneer.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
             </div>
           </div>
