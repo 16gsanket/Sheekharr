@@ -22,7 +22,7 @@ function FlavouredMilk() {
 
     return (
         <div className="bg-white rounded shadow p-4 max-w-md mx-auto mt-8">
-            <h1> Hello world</h1>
+            <h1> ... Flovoured Milk coming soon ... </h1>
         </div>
     )
 

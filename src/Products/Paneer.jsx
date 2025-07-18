@@ -39,8 +39,14 @@ function Paneer() {
   // Sheekharr coagulant cost (now using lifted state)
   const sheekharrCoagulantCost = (Number(sheekharrCoagulantQty) || 0) * (Number(sheekharrCoagulantPrice) || 0);
 
+  // Customer coagulant cost
+  const customerCoagulant = ingredients.find(i => i.name === 'Customer Coagulant');
+  const customerCoagulantQty = customerCoagulant ? Number(customerCoagulant.quantity) : 0;
+  const customerCoagulantPrice = customerCoagulant ? Number(customerCoagulant.price) : 0;
+  const customerCoagulantCost = customerCoagulantQty * customerCoagulantPrice;
+
   // Profit with above batch (now using lifted state)
-  const profitWithBatch = ((Number(sheekharrPaneerQty) - Number(totalPaneer)) * sellingPrice) - sheekharrCoagulantCost;
+  const profitWithBatch = ((Number(sheekharrPaneerQty) - Number(totalPaneer)) * sellingPrice) - sheekharrCoagulantCost + customerCoagulantCost;
 
   const [customerDailyProduction, setCustomerDailyProduction] = useState(1000);
 
@@ -50,12 +56,16 @@ function Paneer() {
 
   // Customer Daily Extra Paneer with SC 900 (kg)
   const customerDailyExtraPaneer =
-    (customerDailyProduction * (sheekharrYieldPercent / customerYieldPercentNum)) - customerDailyProduction;
+    (customerDailyProduction * (sheekharrYieldPercent / customerYieldPercentNum)) - customerDailyProduction ;
 
   // Customer Daily Extra Profit (Rs)
+  // const customerDailyExtraProfit =
+  //   (customerDailyExtraPaneer * sellingPrice) -
+  //   (((customerDailyProduction + customerDailyExtraPaneer) * sheekharrCoagulantCost) / Number(sheekharrPaneerQty));
   const customerDailyExtraProfit =
-    (customerDailyExtraPaneer * sellingPrice) -
-    (((customerDailyProduction + customerDailyExtraPaneer) * sheekharrCoagulantCost) / Number(sheekharrPaneerQty));
+    (customerDailyExtraPaneer * sellingPrice)
+    - (((customerDailyProduction + customerDailyExtraPaneer) / sheekharrPaneerQty) * (sheekharrCoagulantQty * sheekharrCoagulantPrice))
+    + (((customerDailyProduction / totalPaneer) * (customerCoagulantQty * customerCoagulantPrice)));
 
   // Customer Monthly Extra Profit (Rs)
   const customerMonthlyExtraProfit = customerDailyExtraProfit * 30;
