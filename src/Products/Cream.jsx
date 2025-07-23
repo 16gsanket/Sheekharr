@@ -13,9 +13,9 @@ const defaultSheekharrIngredients = [
   { name: 'Milk Fat', quantity: 20, price: 425, isFixed: true },
   { name: 'SMP', quantity: 7, price: 300, isFixed: true },
   { name: 'Flavour', quantity: 0.2, price: 600, isFixed: true },
-  { name: 'CreamTec DC', quantity: 0.8, price: 499, isFixed: true },
   { name: 'Water', quantity: 72, price: 0.1, isFixed: true },
   { name: 'Milk', quantity: 0, price: 0, isFixed: true },
+  { name: 'CreamTec DC', quantity: 0.8, price: 499, isFixed: true },
 ];
 
 function Cream() {

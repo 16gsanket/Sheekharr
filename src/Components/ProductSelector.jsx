@@ -12,11 +12,11 @@ function ProductSelector({ product, setProduct }) {
         <option value="Ice Cream">Ice Cream</option>
         <option value="Kulfi">Kulfi</option>
         <option value="Dahi">Flavoured Dahi</option>
-        {/* <option value="Flavoured Milk">Flavoured Milk</option>
+        <option value="Flavoured Milk">Flavoured Milk</option>
         <option value="Mayonnaise">Mayonnaise</option>
         <option value="FrozenDessert">Frozen Dessert</option>
         <option value="Gulabjamun">Gulabjamun</option>
-        <option value="Cream">Cream</option> */}
+        <option value="Cream">Cream</option>
 
       </select>
     </div>

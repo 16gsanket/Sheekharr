@@ -49,8 +49,8 @@ function FrozenDessert() {
     { name: 'SMP', quantity: 11, price: 340, isFixed: true },
     { name: 'Sugar', quantity: 15, price: 45, isFixed: true },
     { name: 'Flavour', quantity: 0.1, price: 600, isFixed: true },
-    { name: 'CreamTec FD Pro', quantity: 0.9, price: 249, isFixed: true },
     { name: 'Water', quantity: 67.5, price: 0, isFixed: true },
+    { name: 'CreamTec FD Pro', quantity: 0.9, price: 249, isFixed: true },
   ];
   const [creamTecIngredients, setCreamTecIngredients] = useState(defaultCreamTecIngredients);
   const [creamTecOverrun, setCreamTecOverrun] = useState(100);
@@ -199,49 +199,60 @@ function FrozenDessert() {
             </thead>
             <tbody>
               {creamTecIngredients.map((ing, idx) => (
-                <tr key={idx}>
-                  <td className="p-2">
-                    <input
-                      className="border rounded p-1 w-full"
-                      type="text"
-                      value={ing.name}
-                      onChange={e => handleCreamTecIngredientChange(idx, 'name', e.target.value)}
-                      placeholder="Ingredient Name"
-                      disabled={ing.isFixed}
-                    />
-                  </td>
-                  <td className="p-2 text-right">
-                    <input
-                      className="border rounded p-1 w-20 text-right"
-                      type="number"
-                      value={ing.quantity}
-                      min="0"
-                      step="any"
-                      onChange={e => handleCreamTecIngredientChange(idx, 'quantity', e.target.value)}
-                    />
-                  </td>
-                  <td className="p-2 text-right">
-                    <input
-                      className="border rounded p-1 w-20 text-right"
-                      type="number"
-                      value={ing.price}
-                      min="0"
-                      step="any"
-                      onChange={e => handleCreamTecIngredientChange(idx, 'price', e.target.value)}
-                    />
-                  </td>
-                  <td className="p-2 text-center">
-                    {!ing.isFixed && (
-                      <button
-                        className="text-red-500 font-bold"
-                        onClick={() => removeCreamTecIngredient(idx)}
-                        aria-label="Remove ingredient"
-                      >
-                        ×
-                      </button>
-                    )}
-                  </td>
-                </tr>
+                <React.Fragment key={idx}>
+                  <tr>
+                    <td className="p-2">
+                      <input
+                        className="border rounded p-1 w-full"
+                        type="text"
+                        value={ing.name}
+                        onChange={e => handleCreamTecIngredientChange(idx, 'name', e.target.value)}
+                        placeholder="Ingredient Name"
+                        disabled={ing.isFixed}
+                      />
+                    </td>
+                    <td className="p-2 text-right">
+                      <input
+                        className="border rounded p-1 w-20 text-right"
+                        type="number"
+                        value={ing.quantity}
+                        min="0"
+                        step="any"
+                        onChange={e => handleCreamTecIngredientChange(idx, 'quantity', e.target.value)}
+                      />
+                    </td>
+                    <td className="p-2 text-right">
+                      <input
+                        className="border rounded p-1 w-20 text-right"
+                        type="number"
+                        value={ing.price}
+                        min="0"
+                        step="any"
+                        onChange={e => handleCreamTecIngredientChange(idx, 'price', e.target.value)}
+                      />
+                    </td>
+                    <td className="p-2 text-center">
+                      {!ing.isFixed && (
+                        <button
+                          className="text-red-500 font-bold"
+                          onClick={() => removeCreamTecIngredient(idx)}
+                          aria-label="Remove ingredient"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                  {/* Dosage punchline for CreamTec FD Pro */}
+                  {ing.name === 'CreamTec FD Pro' && (
+                    <tr>
+                      <td colSpan={4} className="pl-4 pb-2 text-xs text-gray-500">
+                        <span className='font-bold'>Dosage</span> : {creamTecTotalMix > 0 ? ((Number(ing.quantity) / Number(creamTecTotalMix)) * 100).toFixed(2) : '0'}% of FD mix<br/>
+                        <span className='font-bold'>Recommended Dosage</span> : 0.9% of FD mix
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>

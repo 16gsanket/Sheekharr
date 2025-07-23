@@ -18,10 +18,10 @@ const defaultGelTecIngredients = [
   { name: 'Salt', quantity: 1.6, price: 35, isFixed: true },
   { name: 'Sugar', quantity: 8, price: 45, isFixed: true },
   { name: 'Acids', quantity: 0.6, price: 150, isFixed: true },
-  { name: 'GelTec XR', quantity: 4, price: 599, isFixed: true },
   { name: 'Preservatives', quantity: 0.1, price: 400, isFixed: true },
   { name: 'Flavours', quantity: 0.2, price: 400, isFixed: true },
   { name: 'Water', quantity: 70.5, price: 0, isFixed: true },
+  { name: 'GelTec XR', quantity: 4, price: 599, isFixed: true },
 ];
 
 function Mayonnaise() {
