@@ -28,6 +28,7 @@ function Mayonnaise() {
   const [ingredients, setIngredients] = useState(defaultIngredients);
   const [gelTecIngredients, setGelTecIngredients] = useState(defaultGelTecIngredients);
   const [customerDailyProduction, setCustomerDailyProduction] = useState(500);
+  const [mayonnaiseSellingPrice, setMayonnaiseSellingPrice] = useState(120);
 
   // Conventional Table Calculations
   const totalWeight = ingredients.reduce((sum, ing) => sum + (Number(ing.quantity) || 0), 0);
@@ -83,7 +84,10 @@ function Mayonnaise() {
     setGelTecIngredients(ings => ings.filter((_, i) => i !== idx));
   };
 
+  // Profit Calculations with selling price
   const profitPerKg = (pricePerKg && gelTecPricePerKg) ? (Number(pricePerKg) - Number(gelTecPricePerKg)) : 0;
+  const profitMarginPerKg = mayonnaiseSellingPrice ? (mayonnaiseSellingPrice - Number(pricePerKg)) : 0;
+  const gelTecProfitMarginPerKg = mayonnaiseSellingPrice ? (mayonnaiseSellingPrice - Number(gelTecPricePerKg)) : 0;
   const dailyExtraProfit = profitPerKg && customerDailyProduction ? profitPerKg * customerDailyProduction : 0;
   const monthlyExtraProfit = dailyExtraProfit ? dailyExtraProfit * 30 : 0;
 
@@ -261,10 +265,11 @@ function Mayonnaise() {
         <div className="flex items-center justify-between mb-2">
           <span className="font-semibold">Mayonnaise selling price (Rs):</span>
           <input
-            className="border rounded p-1 w-24 text-right font-bold bg-green-100"
+            className="border rounded p-1 w-24 text-right font-bold"
             type="number"
-            value={120}
-            disabled
+            value={mayonnaiseSellingPrice}
+            onChange={e => setMayonnaiseSellingPrice(e.target.value === '' ? '' : Number(e.target.value))}
+            min="0"
           />
         </div>
         <div className="flex items-center justify-between mb-2">
@@ -274,7 +279,7 @@ function Mayonnaise() {
         <div className="flex items-center justify-between mb-2">
           <span className="font-semibold">Customer Daily production (kg):</span>
           <input
-            className="border rounded p-1 w-24 text-right font-bold bg-green-100"
+            className="border rounded p-1 w-24 text-right font-bold "
             type="number"
             value={customerDailyProduction}
             onChange={e => setCustomerDailyProduction(e.target.value === '' ? '' : Number(e.target.value))}

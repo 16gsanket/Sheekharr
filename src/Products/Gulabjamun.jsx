@@ -260,11 +260,25 @@ function Gulabjamun() {
                   </td>
                 </tr>
                 {/* Dosage punchline for TexTec GJ */}
+                {/* Code to Change the dosage preferences for TexTec GJ */}
                 {ing.name === 'TexTec GJ' && (
                   <tr>
-                    <td colSpan={4} className="pl-4 pb-2 text-xs text-gray-500">
-                      <span className='font-bold'>Dosage</span> : {texTecTotalWeight > 0 ? ((Number(ing.quantity) / Number(texTecTotalWeight)) * 100).toFixed(2) : '0'}% of milk solids replacement<br />
-                      <span className='font-bold'>Recommended Dosage</span> : 10% milk solids replacement
+                    <td colSpan={4} className="pt-2 pl-4 pb-2 text-xs text-gray-500">
+                      <span className='font-bold  my-1'>Replacement</span> : {(() => {
+                        const khoya = texTecIngredients.find(i => i.name === 'Khoya')?.quantity || 0;
+                        const smp = texTecIngredients.find(i => i.name === 'SMP')?.quantity || 0;
+                        const maida = texTecIngredients.find(i => i.name === 'Maida')?.quantity || 0;
+                        const texTecGJ = Number(ing.quantity) || 0;
+                        const milkSolids = Number(khoya) + Number(smp) + Number(maida);
+                        return milkSolids > 0 ? ((texTecGJ / milkSolids) * 100).toFixed(2) : '0';
+                      })()}% of milk solids replacement<br />
+                      <span className='font-bold'>Recommended Replacement</span> : 10% of milk solids replacement<br />
+                      <span className='font-bold'>Dosage</span> : {
+                        (()=>{
+                          const texTecGJ = Number(ing.quantity) || 0;
+                          return texTecTotalDryMix > 0 ? ((texTecGJ / texTecTotalDryMix) * 100).toFixed(2) : '0';
+                        })()
+                      }% of total dry mix or fried
                     </td>
                   </tr>
                 )}
@@ -323,7 +337,7 @@ function Gulabjamun() {
         <div className="flex items-center justify-between mb-2">
           <span className="font-semibold">Gulabjamun selling price (Rs):</span>
           <input
-            className="border rounded p-1 w-24 text-right font-bold bg-green-100"
+            className="border rounded p-1 w-24 text-right font-bold "
             type="number"
             value={gulabjamunSellingPrice}
             onChange={e => setGulabjamunSellingPrice(e.target.value === '' ? '' : Number(e.target.value))}
@@ -336,7 +350,7 @@ function Gulabjamun() {
         <div className="flex items-center justify-between mb-2">
           <span className="font-semibold">Customer Daily production (kg):</span>
           <input
-            className="border rounded p-1 w-24 text-right font-bold bg-green-100"
+            className="border rounded p-1 w-24 text-right font-bold "
             type="number"
             value={customerDailyProduction}
             onChange={e => setCustomerDailyProduction(e.target.value === '' ? '' : Number(e.target.value))}

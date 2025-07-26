@@ -170,7 +170,7 @@ function FrozenDessert() {
           <div className="flex items-center justify-between">
             <span className="font-semibold">Overrun %:</span>
             <input
-              className="border rounded p-1 w-24 text-right font-bold bg-green-100"
+              className="border rounded p-1 w-24 text-right font-bold "
               type="number"
               value={overrun}
               min="0"
@@ -274,7 +274,7 @@ function FrozenDessert() {
             <div className="flex items-center justify-between">
               <span className="font-semibold">Overrun %:</span>
               <input
-                className="border rounded p-1 w-24 text-right font-bold bg-green-100"
+                className="border rounded p-1 w-24 text-right font-bold "
                 type="number"
                 value={creamTecOverrun}
                 min="0"
@@ -294,7 +294,7 @@ function FrozenDessert() {
           <div className="flex items-center justify-between mb-2">
             <span className="font-semibold">FD selling price per kg (Rs):</span>
             <input
-              className="border rounded p-1 w-24 text-right font-bold bg-green-100"
+              className="border rounded p-1 w-24 text-right font-bold "
               type="number"
               value={fdSellingPrice}
               onChange={e => setFdSellingPrice(e.target.value === '' ? '' : Number(e.target.value))}
@@ -311,7 +311,7 @@ function FrozenDessert() {
           <div className="flex items-center justify-between mb-2">
             <span className="font-semibold">Customer daily production (kg):</span>
             <input
-              className="border rounded p-1 w-24 text-right font-bold bg-green-100"
+              className="border rounded p-1 w-24 text-right font-bold "
               type="number"
               value={customerDailyProduction}
               onChange={e => setCustomerDailyProduction(e.target.value === '' ? '' : Number(e.target.value))}

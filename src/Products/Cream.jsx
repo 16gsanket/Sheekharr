@@ -262,7 +262,7 @@ function Cream() {
         <div className="flex items-center justify-between mb-2">
           <span className="font-semibold">Customer daily production (kg):</span>
           <input
-            className="border rounded p-1 w-24 text-right font-bold bg-green-100"
+            className="border rounded p-1 w-24 text-right font-bold "
             type="number"
             value={customerDailyProduction}
             min="0"
