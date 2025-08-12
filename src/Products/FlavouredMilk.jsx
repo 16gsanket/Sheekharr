@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const defaultIngredients = [
   { name: 'Milk', quantity: 90.75, price: 30, isFixed: true },
@@ -22,6 +22,23 @@ function FlavouredMilk() {
   const [ingredients, setIngredients] = useState(defaultIngredients);
   // CreamTec Table State
   const [creamTecIngredients, setCreamTecIngredients] = useState(defaultCreamTecIngredients);
+
+  // One-way sync: Mirror Milk, Sugar, Flavour from Customer -> CreamTec
+  const SYNC_INGREDIENT_NAMES = ['Milk', 'Sugar', 'Flavour'];
+  useEffect(() => {
+    setCreamTecIngredients(prev =>
+      prev.map(ing => {
+        if (!SYNC_INGREDIENT_NAMES.includes(ing.name)) return ing;
+        const customerMatch = ingredients.find(ci => ci.name === ing.name);
+        if (!customerMatch) return ing;
+        return {
+          ...ing,
+          quantity: customerMatch.quantity,
+          price: customerMatch.price,
+        };
+      })
+    );
+  }, [ingredients]);
 
   // Customer Table Calculations
   const totalQty = ingredients.reduce((sum, ing) => sum + (Number(ing.quantity) || 0), 0);

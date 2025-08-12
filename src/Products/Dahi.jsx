@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const defaultIngredients = [
   { name: 'Milk (3.1% fat, 8.5% SNF)', quantity: 97.9, price: 35, isFixed: true },
@@ -19,6 +19,28 @@ function Dahi() {
   const [ingredients, setIngredients] = useState(defaultIngredients);
   // Sheekharr table state
   const [sheekharrIngredients, setSheekharrIngredients] = useState(defaultSheekharrIngredients);
+
+  // One-way sync from Customer -> Sheekharr for Milk, Culture, Flavour
+  // Map customer ingredient names to corresponding Sheekharr names
+  const SYNC_NAME_MAP = {
+    'Milk (3.1% fat, 8.5% SNF)': 'Milk',
+    'Culture': 'Culture',
+    'Flavour': 'Flavour',
+  };
+  useEffect(() => {
+    setSheekharrIngredients(prev => prev.map(sIng => {
+      // Find the customer ingredient name that maps to this Sheekharr ingredient
+      const customerName = Object.keys(SYNC_NAME_MAP).find(cName => SYNC_NAME_MAP[cName] === sIng.name);
+      if (!customerName) return sIng;
+      const customerIng = ingredients.find(ci => ci.name === customerName);
+      if (!customerIng) return sIng;
+      return {
+        ...sIng,
+        quantity: customerIng.quantity,
+        price: customerIng.price,
+      };
+    }));
+  }, [ingredients]);
 
   // Customer table calculations
   const totalQuantity = ingredients.reduce((sum, ing) => sum + (Number(ing.quantity) || 0), 0);

@@ -32,6 +32,23 @@ function IceCream() {
     creamtecDefaultIngredients.findIndex(ing => ing.name === 'CreamTec IC Pro')
   );
 
+  // One-way sync: keep selected ingredient values in CreamTec aligned with Customer when Customer changes
+  const SYNC_INGREDIENT_NAMES = ['Milk', 'SMP', 'Flavour', 'Stabilizers'];
+  useEffect(() => {
+    setCreamtecIngredients(prev =>
+      prev.map(ing => {
+        if (!SYNC_INGREDIENT_NAMES.includes(ing.name)) return ing;
+        const customerMatch = customerIngredients.find(ci => ci.name === ing.name);
+        if (!customerMatch) return ing;
+        return {
+          ...ing,
+          quantity: customerMatch.quantity,
+          price: customerMatch.price,
+        };
+      })
+    );
+  }, [customerIngredients]);
+
   // --- Customer Table Calculations ---
   const customerTotalMix = customerIngredients.reduce((sum, ing) => sum + Number(ing.quantity || 0), 0);
   const customerTotalCost = customerIngredients.reduce(

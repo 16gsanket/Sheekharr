@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const defaultIngredients = [
   { name: 'Oil', quantity: 25, price: 140, isFixed: true },
@@ -29,6 +29,23 @@ function Mayonnaise() {
   const [gelTecIngredients, setGelTecIngredients] = useState(defaultGelTecIngredients);
   const [customerDailyProduction, setCustomerDailyProduction] = useState(500);
   const [mayonnaiseSellingPrice, setMayonnaiseSellingPrice] = useState(120);
+
+  // One-way sync: Mirror selected ingredients from Customer -> GelTec XR
+  const SYNC_INGREDIENT_NAMES = ['Oil', 'SMP', 'Salt', 'Sugar', 'Acids', 'Preservatives', 'Flavours'];
+  useEffect(() => {
+    setGelTecIngredients(prev =>
+      prev.map(ing => {
+        if (!SYNC_INGREDIENT_NAMES.includes(ing.name)) return ing;
+        const customerMatch = ingredients.find(ci => ci.name === ing.name);
+        if (!customerMatch) return ing;
+        return {
+          ...ing,
+          quantity: customerMatch.quantity,
+          price: customerMatch.price,
+        };
+      })
+    );
+  }, [ingredients]);
 
   // Conventional Table Calculations
   const totalWeight = ingredients.reduce((sum, ing) => sum + (Number(ing.quantity) || 0), 0);

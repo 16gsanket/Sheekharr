@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const defaultIngredients = [
   { name: 'Milk', quantity: 140, price: 50 },
@@ -56,6 +56,28 @@ function Kulfi() {
   ];
   const [sheekharrIngredients, setSheekharrIngredients] = useState(defaultSheekharrIngredients);
   const [sheekharrFinalProductKg, setSheekharrFinalProductKg] = useState(100);
+
+  // One-way sync from Customer -> CreamTec KF Pro for specific ingredients
+  // Map customer ingredient names to corresponding Sheekharr names
+  const SYNC_NAME_MAP = {
+    'Milk': 'Milk (6% fat, 9% SNF)',
+    'Sugar': 'Sugar',
+    'Flavour': 'Flavour',
+  };
+  useEffect(() => {
+    setSheekharrIngredients(prev => prev.map(sIng => {
+      // Find the customer name that maps to this Sheekharr ingredient
+      const customerName = Object.keys(SYNC_NAME_MAP).find(cName => SYNC_NAME_MAP[cName] === sIng.name);
+      if (!customerName) return sIng;
+      const customerIng = ingredients.find(ci => ci.name === customerName);
+      if (!customerIng) return sIng;
+      return {
+        ...sIng,
+        quantity: customerIng.quantity,
+        price: customerIng.price,
+      };
+    }));
+  }, [ingredients]);
 
   const sheekharrTotalCost = sheekharrIngredients.reduce(
     (sum, ing) => sum + (Number(ing.quantity) * Number(ing.price)),
