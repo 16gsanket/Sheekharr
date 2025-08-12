@@ -16,9 +16,14 @@ const defaultIngredients = [
 function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, customerYieldPercent, paneerQty, setPaneerQty, selectedCoagulant, setSelectedCoagulant, coagulantQty, setCoagulantQty, coagulantPrice, setCoagulantPrice }) {
   const [ingredients, setIngredients] = useState(defaultIngredients.map(ing => ({ ...ing, quantity: ing.name === 'Milk' ? milkQty : ing.quantity, price: ing.name === 'Milk' ? milkPrice : ing.price })));
 
+  // Derive local Sheekharr Milk values from the ingredients state
+  const sheekharrMilkRow = ingredients.find(ing => ing.name === 'Milk');
+  const sheekharrMilkQty = Number(sheekharrMilkRow?.quantity) || 0;
+  const sheekharrMilkPrice = Number(sheekharrMilkRow?.price) || 0;
+
   // New state for editable coagulant fields (fallback to local if not provided)
   const coagulant = COAGULANT_OPTIONS[selectedCoagulant];
-  const autoCoagulantQty = milkQty > 0 ? (milkQty * coagulant.dosagePercent / 100) : 0;
+  const autoCoagulantQty = sheekharrMilkQty > 0 ? (sheekharrMilkQty * coagulant.dosagePercent / 100) : 0;
   const autoCoagulantPricePerKg = coagulant.pricePerKg;
   const [localCoagulantQty, setLocalCoagulantQty] = useState(autoCoagulantQty);
   const [localCoagulantPrice, setLocalCoagulantPrice] = useState(autoCoagulantPricePerKg);
@@ -29,22 +34,29 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
   const effectiveCoagulantPrice = typeof coagulantPrice !== 'undefined' ? coagulantPrice : localCoagulantPrice;
   const effectiveSetCoagulantPrice = setCoagulantPrice || setLocalCoagulantPrice;
 
+  // One-way sync: when Customer Milk quantity changes, update Sheekharr Milk quantity too
+  React.useEffect(() => {
+    setIngredients(prev => prev.map(ing => (
+      ing.name === 'Milk' ? { ...ing, quantity: milkQty } : ing
+    )));
+  }, [milkQty]);
+
   // Sync coagulant fields with auto values when dependencies change, unless user has overridden
   React.useEffect(() => {
     if (!setCoagulantQty) setLocalCoagulantQty(autoCoagulantQty);
     if (!setCoagulantPrice) setLocalCoagulantPrice(autoCoagulantPricePerKg);
-  }, [selectedCoagulant, milkQty]);
+  }, [selectedCoagulant, sheekharrMilkQty]);
 
   // Calculate coagulant cost
   const coagulantCost = (Number(effectiveCoagulantQty) || 0) * (Number(effectiveCoagulantPrice) || 0);
 
   // Calculate yield %
-  const yieldPercent = milkQty > 0 ? ((paneerQty * 100) / milkQty).toFixed(2) : '';
+  const yieldPercent = sheekharrMilkQty > 0 ? ((paneerQty * 100) / sheekharrMilkQty).toFixed(2) : '';
 
   // Calculate price per kg (milk + coagulant + extra ingredients)
   const extraIngredients = ingredients.filter(ing => !ing.isFixed);
   const extraCost = extraIngredients.reduce((sum, ing) => sum + (Number(ing.quantity) * Number(ing.price)), 0);
-  const totalCost = (Number(milkQty) * Number(milkPrice)) + Number(coagulantCost) + extraCost;
+  const totalCost = (Number(sheekharrMilkQty) * Number(sheekharrMilkPrice)) + Number(coagulantCost) + extraCost;
   const pricePerKg = paneerQty > 0 ? (totalCost / paneerQty).toFixed(2) : '';
 
   // Yield % difference
@@ -54,7 +66,7 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
   const handleIngredientChange = (idx, field, value) => {
     // If editing milk row
     if (ingredients[idx].name === 'Milk') {
-      if (field === 'quantity') setMilkQty(Number(value));
+      // Quantity is controlled by Customer table; do not update parent from Sheekharr table
       if (field === 'price') setMilkPrice(Number(value));
     }
     setIngredients(ings => ings.map((ing, i) => i === idx ? { ...ing, [field]: value } : ing));
@@ -148,6 +160,7 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
                   onChange={e => handleIngredientChange(idx, 'quantity', e.target.value)}
                   placeholder="Quantity"
                   min="0"
+                  disabled={ing.isFixed && ing.name !== 'Milk'}
                 />
                 <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">kg</span>
               </div>
@@ -212,7 +225,7 @@ function SheekharrPaneerTable({ milkQty, setMilkQty, milkPrice, setMilkPrice, cu
           </div>
           <div className="text-xs text-gray-500 mt-1">
             Dosage: {(() => {
-              return milkQty > 0 ? ((Number(effectiveCoagulantQty) / milkQty) * 100).toFixed(2) : '0';
+              return sheekharrMilkQty > 0 ? ((Number(effectiveCoagulantQty) / sheekharrMilkQty) * 100).toFixed(2) : '0';
             })()}% of milk
           </div>
           <div className="text-xs text-gray-500 mt-1">Recommended Dosage : <span className="font-bold">{coagulant.dosagePercent}% of milk </span></div>
